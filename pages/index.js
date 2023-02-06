@@ -4,14 +4,14 @@ import Movies from '../components/Movies';
 
 export default function HomePage() {
 
-    const[text, setText] = useState("War");
+    const[text, setText] = useState("");
     const[arrMovies, setarrMovies] = useState([]);
 
     useEffect(() => {
         // declare the async data fetching function
         const fetchData = async () => {
           // get the data from the api
-          const data = await fetch("https://www.omdbapi.com/?apikey=a2b07930&s=" + text);
+          const data = await fetch("https://www.omdbapi.com/?apikey=1a6a80c8&s=" + text);
           // convert the data to json
           const json = await data.json();
       
@@ -25,13 +25,24 @@ export default function HomePage() {
           .catch(console.error);
         console.log(text);
 
-      }, []);
+      }, [text]);
 
     console.log(arrMovies);
 
-return <>
-<input value={text} onInput ={evt=>setText(evt.target.value)}/>
-{arrMovies.map((item)=> <Movies item = {item} />)}
+if (text=== null || arrMovies=== undefined) {
+  return <> <input value={text} pattern= "[A-Za-zА-Яа-яЁё]{3,}" placeholder='Search movies' onInput ={evt=>setText(evt.target.value)} autoFocus />
+  <p>Фильм не найден</p>
+   </>
+}
 
-</>
+
+else if (arrMovies!== undefined) {
+
+  return <>
+  <input value={text} pattern= "[A-Za-zА-Яа-яЁё]{3,}" placeholder='Search movies' onInput ={evt=>setText(evt.target.value)} autoFocus/>
+  {arrMovies.map((item)=> <Movies item = {item} />)}
+  </>
+
+}
+
 }
